@@ -32,6 +32,7 @@ class _NoteScreenState extends State<NoteScreen> {
   final quill.QuillController _controller = quill.QuillController.basic();
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _editorFocusNode = FocusNode();
+  bool _showExtraOptions = false;
 
   bool isBoldSelected = false;
   bool isItalicSelected = false;
@@ -193,17 +194,12 @@ class _NoteScreenState extends State<NoteScreen> {
         toolbarHeight: 65,
         actions: [
           ElevatedButton.icon(
-            style:
-                ElevatedButton.styleFrom(
-                  elevation: 0, 
-                  shadowColor: Colors.transparent,
-                  foregroundColor: Theme.of(context).colorScheme.primary,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                ).copyWith(
-                  elevation: WidgetStateProperty.all(
-                    0,
-                  ),
-                ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              foregroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+            ).copyWith(elevation: WidgetStateProperty.all(0)),
             onPressed: () async {
               // Выбор даты
               DateTime? pickedDate = await showDatePicker(
@@ -458,9 +454,65 @@ class _NoteScreenState extends State<NoteScreen> {
                       ),
                     ),
                   ),
+
+                  if (_showExtraOptions)
+                    AnimatedSlide(
+                      offset: _showExtraOptions ? Offset(0, 0) : Offset(0, 0.1),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      child: AnimatedOpacity(
+                        opacity: _showExtraOptions ? 1 : 0,
+                        duration: Duration(milliseconds: 300),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 2,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? Color(0xff262626)
+                                  : Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  spacing: 12,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.format_list_numbered,
+                                        color:
+                                            _controller
+                                                    .getSelectionStyle()
+                                                    .attributes[quill
+                                                        .Attribute
+                                                        .list
+                                                        .key]
+                                                    ?.value ==
+                                                'ordered'
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.primary
+                                            : Theme.of(context).hintColor,
+                                      ),
+                                      onPressed: _toggleNumberedList,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   // Custom Toolbar
                   Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -468,7 +520,7 @@ class _NoteScreenState extends State<NoteScreen> {
                           Expanded(
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
+                                horizontal: 5,
                                 vertical: 5,
                               ),
                               decoration: BoxDecoration(
@@ -513,24 +565,23 @@ class _NoteScreenState extends State<NoteScreen> {
                                     ),
                                     onPressed: _toggleCheckbox,
                                   ),
+
                                   IconButton(
-                                    icon: Icon(
-                                      Icons.format_list_numbered,
-                                      color:
-                                          _controller
-                                                  .getSelectionStyle()
-                                                  .attributes[quill
-                                                      .Attribute
-                                                      .list
-                                                      .key]
-                                                  ?.value ==
-                                              'ordered'
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : Theme.of(context).hintColor,
+                                    icon: AnimatedRotation(
+                                      turns: _showExtraOptions ? 0.5 : 0,
+                                      duration: const Duration(
+                                        milliseconds: 200,
+                                      ),
+                                      child: Icon(
+                                        Icons.keyboard_arrow_up,
+                                        color: Theme.of(context).hintColor,
+                                      ),
                                     ),
-                                    onPressed: _toggleNumberedList,
+                                    onPressed: () {
+                                      setState(() {
+                                        _showExtraOptions = !_showExtraOptions;
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
