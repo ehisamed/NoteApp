@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/src/editor/style_widgets/checkbox_point.dart';
 
 class CustomCheckboxBuilder implements quill.QuillCheckboxBuilder {
@@ -189,18 +190,33 @@ class _NoteScreenState extends State<NoteScreen> {
       appBar: AppBar(
         toolbarHeight: 65,
         // title: const Text('Create Note'),
+        // leading: ,
         actions: [
+          // IconButton(onPressed: () {}, icon: const Icon(Icons.add_alarm)),
+          ElevatedButton.icon(
+            onPressed: () {},
+            icon: Icon(Icons.add_alarm),
+            label: Text("Напоминание", style: TextStyle(fontSize: 12)),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 5.0),
             child: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: Transform.flip(
+                flipX: true,
+                flipY: true,
+                child: Icon(Icons.subdirectory_arrow_right),
+              ),
               onPressed: () {},
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: IconButton(
-              icon: const Icon(Icons.arrow_forward),
+              icon: Transform.flip(
+                flipX: false,
+                flipY: true,
+                child: Icon(Icons.subdirectory_arrow_right),
+              ),
               onPressed: () {},
             ),
           ),
@@ -208,12 +224,30 @@ class _NoteScreenState extends State<NoteScreen> {
       ),
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             // Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextFormField(
+              child: TextField(
                 controller: _titleController,
+                keyboardType: TextInputType.multiline,
+                minLines: 1,
+                maxLines: 5,
+                buildCounter:
+                    (
+                      _, {
+                      required int currentLength,
+                      required bool isFocused,
+                      required int? maxLength,
+                    }) => null,
+                inputFormatters: [
+                  TextInputFormatter.withFunction((oldValue, newValue) {
+                    if (newValue.text.split('\n').length > 4) return oldValue;
+                    return newValue;
+                  }),
+                ],
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Заголовок',
@@ -232,21 +266,24 @@ class _NoteScreenState extends State<NoteScreen> {
               ),
             ),
 
-            const SizedBox(height: 2),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   Text(
                     "Июнь 26",
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
                   ),
 
                   const SizedBox(width: 12),
-                  Text("|", style: TextStyle(
-                    fontWeight: FontWeight.w200,
-                    color: Colors.grey.shade400
-                  ),),
+                  Text(
+                    "|",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
                   const SizedBox(width: 12),
 
                   Container(
@@ -259,6 +296,9 @@ class _NoteScreenState extends State<NoteScreen> {
                     ),
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(10),
+                        ),
                         backgroundColor: Colors.transparent,
                         minimumSize: Size(0, 0),
                         shadowColor: Colors.transparent,
@@ -280,7 +320,7 @@ class _NoteScreenState extends State<NoteScreen> {
                         'Добавить в категорию',
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
-                          fontSize: 14,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -289,7 +329,6 @@ class _NoteScreenState extends State<NoteScreen> {
               ),
             ),
 
-            
             const SizedBox(height: 22),
 
             // Editor + Custom Toolbar
