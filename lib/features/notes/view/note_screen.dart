@@ -1,3 +1,5 @@
+// src/lib/features/notes/view/note_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter/services.dart';
@@ -189,15 +191,93 @@ class _NoteScreenState extends State<NoteScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 65,
-        // title: const Text('Create Note'),
-        // leading: ,
         actions: [
-          // IconButton(onPressed: () {}, icon: const Icon(Icons.add_alarm)),
           ElevatedButton.icon(
-            onPressed: () {},
+            style:
+                ElevatedButton.styleFrom(
+                  elevation: 0, 
+                  shadowColor: Colors.transparent,
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                ).copyWith(
+                  elevation: WidgetStateProperty.all(
+                    0,
+                  ),
+                ),
+            onPressed: () async {
+              // Выбор даты
+              DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(2100),
+                builder: (BuildContext context, Widget? child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      dialogTheme: DialogThemeData(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+
+              if (pickedDate == null) return;
+
+              // Выбор времени
+              TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+                builder: (BuildContext context, Widget? child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      dialogTheme: DialogThemeData(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+
+              if (pickedTime == null) return;
+
+              // Объединяем дату и время
+              final reminderDateTime = DateTime(
+                pickedDate.year,
+                pickedDate.month,
+                pickedDate.day,
+                pickedTime.hour,
+                pickedTime.minute,
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Напоминание установлено на: $reminderDateTime',
+                  ),
+                ),
+              );
+
+              print('Выбранное время напоминания: $reminderDateTime');
+            },
             icon: Icon(Icons.add_alarm),
             label: Text("Напоминание", style: TextStyle(fontSize: 12)),
           ),
+
           Padding(
             padding: const EdgeInsets.only(right: 5.0),
             child: IconButton(

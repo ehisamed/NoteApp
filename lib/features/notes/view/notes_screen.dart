@@ -43,30 +43,30 @@ class _NotesScreenState extends State<NotesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 22, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 24, color: Colors.grey),
-                    ),
+                    // Text(
+                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
+                    //   style: TextStyle(fontSize: 14, color: Colors.grey),
+                    // ),
+                    // Text(
+                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey),
+                    // ),
+                    // Text(
+                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
+                    //   style: TextStyle(fontSize: 18, color: Colors.grey),
+                    // ),
+                    // Text(
+                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
+                    //   style: TextStyle(fontSize: 20, color: Colors.grey),
+                    // ),
+                    // Text(
+                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
+                    //   style: TextStyle(fontSize: 22, color: Colors.grey),
+                    // ),
+                    // Text(
+                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
+                    //   style: TextStyle(fontSize: 24, color: Colors.grey),
+                    // ),
                     Text(
                       AppLocalizations.of(context)!.notesScreen_noNotes,
                       style: TextStyle(fontSize: 26, color: Colors.grey),
