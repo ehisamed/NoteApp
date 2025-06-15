@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/src/editor/style_widgets/checkbox_point.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 class CustomCheckboxBuilder implements quill.QuillCheckboxBuilder {
   @override
@@ -33,6 +36,7 @@ class _NoteScreenState extends State<NoteScreen> {
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _editorFocusNode = FocusNode();
   bool _showExtraOptions = false;
+  bool _isRequestingPermission = false;
 
   bool isBoldSelected = false;
   bool isItalicSelected = false;
@@ -182,6 +186,58 @@ class _NoteScreenState extends State<NoteScreen> {
       }
       _editorFocusNode.requestFocus();
     });
+  }
+
+  Future<bool> requestStoragePermission() async {
+    if (await Permission.photos.isGranted) {
+      print('✅ Already granted');
+      return true;
+    }
+
+    final result = await Permission.photos.request();
+
+    if (result.isGranted) {
+      print('✅ Photos permission granted');
+      return true;
+    } else {
+      print('❌ Photos permission denied');
+      return false;
+    }
+  }
+
+  Future<void> _insertImage() async {
+    if (_isRequestingPermission) return;
+    _isRequestingPermission = true;
+
+    bool permissionGranted = await requestStoragePermission();
+    _isRequestingPermission = false;
+
+    if (!permissionGranted) {
+      print('Permission denied');
+      return;
+    }
+
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final imageUrl = pickedFile.path;
+
+      final index = _controller.selection.baseOffset;
+      final length = _controller.selection.extentOffset - index;
+
+      print('Inserting image at index=$index length=$length path=$imageUrl');
+
+      _controller.replaceText(
+        index < 0 ? 0 : index,
+        length < 0 ? 0 : length,
+        quill.BlockEmbed.image(imageUrl),
+        null,
+      );
+
+      _editorFocusNode.requestFocus();
+      setState(() {}); // если нужно обновить UI
+    }
   }
 
   @override
@@ -414,10 +470,13 @@ class _NoteScreenState extends State<NoteScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: quill.QuillEditor.basic(
+                      child: quill.QuillEditor(
                         controller: _controller,
                         focusNode: _editorFocusNode,
+                        // embedBuilders: FlutterQuillEmbeds.builders(),
+                        scrollController: ScrollController(),
                         config: quill.QuillEditorConfig(
+                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                           placeholder: 'Начните ввод',
                           customStyles: quill.DefaultStyles(
                             paragraph: quill.DefaultTextBlockStyle(
@@ -501,6 +560,13 @@ class _NoteScreenState extends State<NoteScreen> {
                                             : Theme.of(context).hintColor,
                                       ),
                                       onPressed: _toggleNumberedList,
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.image,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                      onPressed: _insertImage,
                                     ),
                                   ],
                                 ),
