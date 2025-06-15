@@ -1,0 +1,34 @@
+name: note_app_practice1
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_localization: ^0.3.2
+  flutter_quill: ^11.4.1
+  flutter_quill_extensions: ^11.0.0
+  intl: ^0.20.2
+  path: ^1.9.1
+  sqflite: ^2.4.2
+  syncfusion_localizations: ^29.2.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  generate: true
+
+l10n:
+  arb-dir: lib/l10n
+  template-arb-file: intl_en.arb
+  output-localization-file: app_localizations.dart

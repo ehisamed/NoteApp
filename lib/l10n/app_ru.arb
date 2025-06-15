@@ -1,0 +1,21 @@
+{
+  "notesScreen_noNotes": "Нет заметок",
+  "@notesScreen_noNotes": {
+    "description": "Отображается, когда на экране заметок ничего нет"
+  },
+
+  "notesScreen_title": "Мои заметки",
+  "@notesScreen_title": {
+    "description": "Заголовок экрана заметок"
+  },
+
+  "homeScreen_welcome": "С возвращением!",
+  "@homeScreen_welcome": {
+    "description": "Приветствие на главном экране"
+  },
+
+  "homeScreen_subtitle": "Вот ваши последние заметки",
+  "@homeScreen_subtitle": {
+    "description": "Подзаголовок на главном экране, показывающий информацию о последних заметках"
+  }
+}

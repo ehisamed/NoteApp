@@ -1,0 +1,18 @@
+{
+  "notesScreen_noNotes": "No notes",
+  "@notesScreen_noNotes": {
+    "description": "Shown when there are no notes on the Notes screen"
+  },
+
+  "notesScreen_title": "My Notes",
+  "@notesScreen_title": {
+    "description": "Title of the Notes screen"
+  },
+
+  "homeScreen_welcome": "Welcome back!",
+  "@homeScreen_welcome": {
+    "description": "Welcome message on the Home screen"
+  },
+
+  "homeScreen_subtitle": "Here are your latest notes"
+}
