@@ -257,7 +257,7 @@ class _NoteScreenState extends State<NoteScreen> {
               backgroundColor: Theme.of(context).colorScheme.surface,
             ).copyWith(elevation: WidgetStateProperty.all(0)),
             onPressed: () async {
-              // Выбор даты
+              
               DateTime? pickedDate = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
