@@ -3,16 +3,29 @@
   "@notesScreen_noNotes": {
     "description": "Shown when there are no notes on the Notes screen"
   },
-
-  "notesScreen_title": "My Notes",
-  "@notesScreen_title": {
-    "description": "Title of the Notes screen"
+  
+  "noteScreen_title": "Title",
+  "@noteScreen_title": {
+    "description": "Hint or label for note title input on the NoteScreen"
   },
 
-  "homeScreen_welcome": "Welcome back!",
-  "@homeScreen_welcome": {
-    "description": "Welcome message on the Home screen"
+  "noteScreen_addToCategory": "Add to category",
+  "@noteScreen_addToCategory": {
+    "description": "Button to add note to a category on the NoteScreen"
   },
 
-  "homeScreen_subtitle": "Here are your latest notes"
+  "noteScreen_startTyping": "Start typing",
+  "@noteScreen_startTyping": {
+    "description": "Hint text for note input field on the NoteScreen"
+  },
+
+  "noteScreen_reminder": "Reminder",
+  "@noteScreen_reminder": {
+    "description": "Label or title for reminder feature on the NoteScreen"
+  },
+
+  "noteScreen_save": "Save",
+  "@noteScreen_save": {
+    "description": "Button to save the note on the NoteScreen"
+  }
 }

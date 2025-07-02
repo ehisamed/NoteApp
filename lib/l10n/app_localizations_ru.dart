@@ -12,11 +12,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notesScreen_noNotes => 'Нет заметок';
 
   @override
-  String get notesScreen_title => 'Мои заметки';
+  String get noteScreen_title => 'Заголовок';
 
   @override
-  String get homeScreen_welcome => 'С возвращением!';
+  String get noteScreen_addToCategory => 'Добавить в категорию';
 
   @override
-  String get homeScreen_subtitle => 'Вот ваши последние заметки';
+  String get noteScreen_startTyping => 'Начните ввод';
+
+  @override
+  String get noteScreen_reminder => 'Напоминание';
+
+  @override
+  String get noteScreen_save => 'Сохранить';
 }

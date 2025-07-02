@@ -103,7 +103,7 @@ class _TasksScreenState extends State<TasksScreen> {
             onPressed: () {},
             icon: const Icon(Icons.add),
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(const Color(0xff171717)),
+              backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
               foregroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all<OutlinedBorder>(
                 const CircleBorder(),

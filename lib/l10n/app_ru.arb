@@ -4,18 +4,28 @@
     "description": "Отображается, когда на экране заметок ничего нет"
   },
 
-  "notesScreen_title": "Мои заметки",
-  "@notesScreen_title": {
-    "description": "Заголовок экрана заметок"
+   "noteScreen_addToCategory": "Добавить в категорию",
+  "@noteScreen_addToCategory": {
+    "description": "Кнопка для добавления заметки в категорию на экране редактирования/создания заметки"
   },
 
-  "homeScreen_welcome": "С возвращением!",
-  "@homeScreen_welcome": {
-    "description": "Приветствие на главном экране"
+  "noteScreen_startTyping": "Начните ввод",
+  "@noteScreen_startTyping": {
+    "description": "Подсказка для поля ввода текста заметки на NoteScreen"
   },
 
-  "homeScreen_subtitle": "Вот ваши последние заметки",
-  "@homeScreen_subtitle": {
-    "description": "Подзаголовок на главном экране, показывающий информацию о последних заметках"
+  "noteScreen_title": "Заголовок",
+  "@noteScreen_title": {
+    "description": "Подсказка или метка для ввода заголовка заметки на NoteScreen"
+  },
+
+  "noteScreen_reminder": "Напоминание",
+  "@noteScreen_reminder": {
+    "description": "Метка или заголовок функции напоминания на NoteScreen"
+  },
+
+  "noteScreen_save": "Сохранить",
+  "@noteScreen_save": {
+    "description": "Кнопка сохранения заметки на NoteScreen"
   }
 }

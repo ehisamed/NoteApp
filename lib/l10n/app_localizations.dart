@@ -101,23 +101,35 @@ abstract class AppLocalizations {
   /// **'No notes'**
   String get notesScreen_noNotes;
 
-  /// Title of the Notes screen
+  /// Hint or label for note title input on the NoteScreen
   ///
   /// In en, this message translates to:
-  /// **'My Notes'**
-  String get notesScreen_title;
+  /// **'Title'**
+  String get noteScreen_title;
 
-  /// Welcome message on the Home screen
+  /// Button to add note to a category on the NoteScreen
   ///
   /// In en, this message translates to:
-  /// **'Welcome back!'**
-  String get homeScreen_welcome;
+  /// **'Add to category'**
+  String get noteScreen_addToCategory;
 
-  /// No description provided for @homeScreen_subtitle.
+  /// Hint text for note input field on the NoteScreen
   ///
   /// In en, this message translates to:
-  /// **'Here are your latest notes'**
-  String get homeScreen_subtitle;
+  /// **'Start typing'**
+  String get noteScreen_startTyping;
+
+  /// Label or title for reminder feature on the NoteScreen
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get noteScreen_reminder;
+
+  /// Button to save the note on the NoteScreen
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get noteScreen_save;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

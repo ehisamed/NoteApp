@@ -5,7 +5,7 @@ import 'package:note_app_practice1/features/notes/view/note_screen.dart';
 import 'package:note_app_practice1/l10n/app_localizations.dart';
 
 class NotesScreen extends StatefulWidget {
-  const NotesScreen({Key? key}) : super(key: key);
+  const NotesScreen({super.key});
 
   @override
   _NotesScreenState createState() => _NotesScreenState();
@@ -29,6 +29,8 @@ class _NotesScreenState extends State<NotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: BlocBuilder<NotesBloc, NotesState>(
         builder: (context, state) {
@@ -43,53 +45,13 @@ class _NotesScreenState extends State<NotesScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Text(
-                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
-                    //   style: TextStyle(fontSize: 14, color: Colors.grey),
-                    // ),
-                    // Text(
-                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
-                    //   style: TextStyle(fontSize: 16, color: Colors.grey),
-                    // ),
-                    // Text(
-                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
-                    //   style: TextStyle(fontSize: 18, color: Colors.grey),
-                    // ),
-                    // Text(
-                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
-                    //   style: TextStyle(fontSize: 20, color: Colors.grey),
-                    // ),
-                    // Text(
-                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
-                    //   style: TextStyle(fontSize: 22, color: Colors.grey),
-                    // ),
-                    // Text(
-                    //   AppLocalizations.of(context)!.notesScreen_noNotes,
-                    //   style: TextStyle(fontSize: 24, color: Colors.grey),
-                    // ),
                     Text(
                       AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 26, color: Colors.grey),
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     Text(
                       AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 28, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 30, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 32, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 34, color: Colors.grey),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.notesScreen_noNotes,
-                      style: TextStyle(fontSize: 36, color: Colors.grey),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -128,7 +90,7 @@ class _NotesScreenState extends State<NotesScreen> {
             },
             icon: const Icon(Icons.add),
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Color(0xff171717)),
+              backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
               foregroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all<OutlinedBorder>(CircleBorder()),
               iconSize: WidgetStateProperty.all(36.0),

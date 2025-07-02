@@ -12,11 +12,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notesScreen_noNotes => 'No notes';
 
   @override
-  String get notesScreen_title => 'My Notes';
+  String get noteScreen_title => 'Title';
 
   @override
-  String get homeScreen_welcome => 'Welcome back!';
+  String get noteScreen_addToCategory => 'Add to category';
 
   @override
-  String get homeScreen_subtitle => 'Here are your latest notes';
+  String get noteScreen_startTyping => 'Start typing';
+
+  @override
+  String get noteScreen_reminder => 'Reminder';
+
+  @override
+  String get noteScreen_save => 'Save';
 }
