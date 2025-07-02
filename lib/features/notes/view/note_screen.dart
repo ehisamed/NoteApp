@@ -239,6 +239,15 @@ class _NoteScreenState extends State<NoteScreen> {
     // Если выделения нет — ничего не делаем, размер не меняется
   }
 
+  void _setTextAlignment(quill.Attribute<String?> alignment) {
+    _controller.formatSelection(alignment);
+    setState(() {});
+  }
+
+  void _alignLeft() => _setTextAlignment(quill.Attribute.leftAlignment);
+  void _alignCenter() => _setTextAlignment(quill.Attribute.centerAlignment);
+  void _alignRight() => _setTextAlignment(quill.Attribute.rightAlignment);
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -518,6 +527,9 @@ class _NoteScreenState extends State<NoteScreen> {
                       onToggleBulletedList: _toggleBulletedList,
                       selectedFontSize: currentFontSize,
                       onFontSizeChanged: _onFontSizeChanged,
+                      onAlignLeft: _alignLeft,
+                      onAlignCenter: _alignCenter,
+                      onAlignRight: _alignRight,
                     ),
 
                   // Custom Toolbar
