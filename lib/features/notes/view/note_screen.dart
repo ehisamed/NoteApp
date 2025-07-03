@@ -544,79 +544,98 @@ class _NoteScreenState extends State<NoteScreen> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  if (showExtraButton)
-                                    IconButton(
-                                      highlightColor: Theme.of(
-                                        context,
-                                      ).colorScheme.primary.withOpacity(0.15),
-                                      icon: Icon(
-                                        Icons.format_list_numbered,
-                                        color: _isNumeredListSelected
-                                            ? Theme.of(
-                                                context,
-                                              ).colorScheme.primary
-                                            : Theme.of(context).hintColor,
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          if (showExtraButton)
+                                            IconButton(
+                                              highlightColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(0.15),
+                                              icon: Icon(
+                                                Icons.format_list_numbered,
+                                                color: _isNumeredListSelected
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary
+                                                    : Theme.of(
+                                                        context,
+                                                      ).hintColor,
+                                              ),
+                                              onPressed: _toggleNumberedList,
+                                            ),
+                                          if (showExtraButton)
+                                            IconButton(
+                                              highlightColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(0.15),
+                                              icon: Icon(
+                                                Icons.image,
+                                                color: Theme.of(
+                                                  context,
+                                                ).hintColor,
+                                              ),
+                                              onPressed: _insertImage,
+                                            ),
+                                          IconButton(
+                                            highlightColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.15),
+                                            icon: Icon(
+                                              Icons.format_bold,
+                                              color: isBoldSelected
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                  : Theme.of(context).hintColor,
+                                            ),
+                                            onPressed: _toggleBold,
+                                          ),
+                                          IconButton(
+                                            highlightColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.15),
+                                            icon: Icon(
+                                              Icons.format_italic,
+                                              color: isItalicSelected
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                  : Theme.of(context).hintColor,
+                                            ),
+                                            onPressed: _toggleItalic,
+                                          ),
+                                          IconButton(
+                                            highlightColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.15),
+                                            icon: Icon(
+                                              Icons.check_box,
+                                              color: isCheckboxSelected
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                  : Theme.of(context).hintColor,
+                                            ),
+                                            onPressed: _toggleCheckbox,
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: _toggleNumberedList,
                                     ),
-
-                                  if (showExtraButton)
-                                    IconButton(
-                                      highlightColor: Theme.of(
-                                        context,
-                                      ).colorScheme.primary.withOpacity(0.15),
-                                      icon: Icon(
-                                        Icons.image,
-                                        color: Theme.of(context).hintColor,
-                                      ),
-                                      onPressed: _insertImage,
-                                    ),
-
-                                  IconButton(
-                                    highlightColor: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.15),
-                                    icon: Icon(
-                                      Icons.format_bold,
-                                      color: isBoldSelected
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : Theme.of(context).hintColor,
-                                    ),
-                                    onPressed: _toggleBold,
-                                  ),
-
-                                  IconButton(
-                                    highlightColor: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.15),
-                                    icon: Icon(
-                                      Icons.format_italic,
-                                      color: isItalicSelected
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : Theme.of(context).hintColor,
-                                    ),
-                                    onPressed: _toggleItalic,
-                                  ),
-
-                                  IconButton(
-                                    highlightColor: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.15),
-                                    icon: Icon(
-                                      Icons.check_box,
-                                      color: isCheckboxSelected
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : Theme.of(context).hintColor,
-                                    ),
-                                    onPressed: _toggleCheckbox,
                                   ),
 
                                   IconButton(
