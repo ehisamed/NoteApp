@@ -19,6 +19,7 @@ class ExtraOptions extends StatefulWidget {
 
   final bool showExtraButton;
 
+
   const ExtraOptions({
     super.key,
     required this.isDark,
@@ -246,7 +247,7 @@ class _ExtraOptionsState extends State<ExtraOptions> {
                   setState(() {});
                 },
               ),
-              
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: DropdownButton<Color>(

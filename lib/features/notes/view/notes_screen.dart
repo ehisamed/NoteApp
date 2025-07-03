@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app_practice1/features/notes/bloc/notes_bloc.dart';
+import 'package:note_app_practice1/features/notes/components/note_card.dart';
 import 'package:note_app_practice1/features/notes/view/note_screen.dart';
 import 'package:note_app_practice1/l10n/app_localizations.dart';
 
@@ -62,9 +63,32 @@ class _NotesScreenState extends State<NotesScreen> {
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 final note = notes[index];
-                return ListTile(
-                  title: Text(note.title),
-                  subtitle: Text(note.content),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<NotesBloc>(),
+                          child: NoteScreen(
+                            contentJson: note.content,
+                            title: note.title,
+                            noteId: note.id,
+                            createdAt: note.createdAt,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: NoteCard(
+                    note: note,
+                    onDelete: () {
+                      final id = note.id;
+                      if (id != null) {
+                        context.read<NotesBloc>().add(DeleteNote(id));
+                      }
+                    },
+                  ),
                 );
               },
             );
@@ -85,12 +109,19 @@ class _NotesScreenState extends State<NotesScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NoteScreen()),
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<NotesBloc>(),
+                    child: NoteScreen(contentJson: '', title: ''),
+                  ),
+                ),
               );
             },
             icon: const Icon(Icons.add),
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
+              backgroundColor: WidgetStateProperty.all(
+                Theme.of(context).colorScheme.primary,
+              ),
               foregroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all<OutlinedBorder>(CircleBorder()),
               iconSize: WidgetStateProperty.all(36.0),

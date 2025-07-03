@@ -1,13 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // src/lib/features/notes/view/note_screen.dart
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 // ignore: implementation_imports
 import 'package:flutter_quill/src/editor/style_widgets/checkbox_point.dart';
+import 'package:note_app_practice1/features/notes/bloc/notes_bloc.dart';
 import 'package:note_app_practice1/features/notes/components/undo_redo_button.dart';
+import 'package:note_app_practice1/features/notes/model/note_model.dart';
 import 'package:note_app_practice1/features/notes/service/insert_image_gallery.dart';
 import 'package:note_app_practice1/features/notes/service/insert_image_camera.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -18,6 +23,7 @@ import 'package:note_app_practice1/features/notes/components/dialog.dart';
 import 'package:note_app_practice1/features/notes/utils/get_formatted_date.dart';
 import 'package:note_app_practice1/l10n/app_localizations.dart';
 import 'package:note_app_practice1/features/notes/components/extra_options.dart';
+import 'package:dart_quill_delta/dart_quill_delta.dart';
 
 class CustomCheckboxBuilder implements quill.QuillCheckboxBuilder {
   @override
@@ -36,7 +42,18 @@ class CustomCheckboxBuilder implements quill.QuillCheckboxBuilder {
 }
 
 class NoteScreen extends StatefulWidget {
-  const NoteScreen({super.key});
+  final String? contentJson;
+  final String? title;
+  final int? noteId; // новый параметр id заметки
+  final DateTime? createdAt;
+
+  const NoteScreen({
+    super.key,
+    this.contentJson,
+    this.title,
+    this.noteId,
+    this.createdAt,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -44,8 +61,8 @@ class NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<NoteScreen> {
-  final quill.QuillController _controller = quill.QuillController.basic();
-  final TextEditingController _titleController = TextEditingController();
+  late quill.QuillController _controller = quill.QuillController.basic();
+  late TextEditingController _titleController = TextEditingController();
   final FocusNode _editorFocusNode = FocusNode();
   bool _showExtraOptions = false;
   late final InsertImageFromGallery insertImageFromGallery;
@@ -60,6 +77,28 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   void initState() {
     super.initState();
+
+    quill.Document document;
+    _titleController = TextEditingController(text: widget.title ?? '');
+
+    if (widget.contentJson != null) {
+      try {
+        final delta = Delta.fromJson(jsonDecode(widget.contentJson!));
+        document = quill.Document.fromDelta(delta);
+      } catch (e) {
+        document = quill.Document();
+      }
+    } else {
+      document = quill.Document();
+    }
+
+    final int docLength = document.length;
+    final int cursorPosition = docLength > 0 ? docLength - 1 : 0;
+
+    _controller = quill.QuillController(
+      document: document,
+      selection: TextSelection.collapsed(offset: cursorPosition),
+    );
 
     insertImageFromGallery = InsertImageFromGallery(
       _controller,
@@ -330,9 +369,7 @@ class _NoteScreenState extends State<NoteScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 100, // фикс под 2 строки
-                ),
+                constraints: BoxConstraints(maxHeight: 100),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextField(
@@ -341,7 +378,7 @@ class _NoteScreenState extends State<NoteScreen> {
                     minLines: 1,
                     maxLines: 2,
                     textAlign: TextAlign.start,
-                    textInputAction: TextInputAction.done, // запрет Enter
+                    textInputAction: TextInputAction.done,
                     buildCounter:
                         (
                           _, {
@@ -350,9 +387,7 @@ class _NoteScreenState extends State<NoteScreen> {
                           required int? maxLength,
                         }) => null,
                     inputFormatters: [
-                      FilteringTextInputFormatter.deny(
-                        RegExp(r'\n'),
-                      ), // 🚫 запрещаем Enter
+                      FilteringTextInputFormatter.deny(RegExp(r'\n')),
                     ],
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -551,8 +586,8 @@ class _NoteScreenState extends State<NoteScreen> {
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
@@ -684,7 +719,54 @@ class _NoteScreenState extends State<NoteScreen> {
                                     Colors.white.withOpacity(0.2),
                                   ),
                                 ),
-                            onPressed: () {},
+                            onPressed: () {
+                              final title = _titleController.text.trim();
+
+                              if (title.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Введите заголовок'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              final contentJson = _controller.document
+                                  .toDelta()
+                                  .toJson();
+                              final now = DateTime.now();
+
+                              // Проверяем: есть ли у заметки id — значит update, иначе add
+                              if (widget.noteId != null) {
+                                // Обновляем существующую заметку
+                                final updatedNote = NoteModel(
+                                  id: widget.noteId, // сохраняем id для update
+                                  title: title,
+                                  content: jsonEncode(contentJson),
+                                  createdAt:
+                                      widget.createdAt ??
+                                      now, // сохраняем оригинальную дату создания (если есть)
+                                  updatedAt: now, // обновляем дату обновления
+                                );
+
+                                context.read<NotesBloc>().add(
+                                  UpdateNote(updatedNote),
+                                );
+                              } else {
+                                // Создаём новую заметку
+                                final newNote = NoteModel(
+                                  title: title,
+                                  content: jsonEncode(contentJson),
+                                  createdAt: now,
+                                  updatedAt: now,
+                                );
+
+                                context.read<NotesBloc>().add(AddNote(newNote));
+                              }
+
+                              Navigator.pop(context);
+                            },
+
                             child: Text(
                               AppLocalizations.of(context)!.noteScreen_save,
                               style: TextStyle(

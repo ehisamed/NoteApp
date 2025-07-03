@@ -1,7 +1,7 @@
 // lib/features/notes/repository/note_repository.dart
 
-import 'package:note_app_practice1/features/notes/model/note_model.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:note_app_practice1/features/notes/model/note_model.dart';
 
 class NoteRepository {
   final Database db;
@@ -13,10 +13,21 @@ class NoteRepository {
     return result.map((e) => NoteModel.fromMap(e)).toList();
   }
 
-  Future<void> insertNote(NoteModel note) async {
-    await db.insert(
+  Future<NoteModel?> getNoteById(int id) async {
+    final result = await db.query('notes', where: 'id = ?', whereArgs: [id]);
+    if (result.isNotEmpty) {
+      return NoteModel.fromMap(result.first);
+    }
+    return null;
+  }
+
+  Future<int> insertNote(NoteModel note) async {
+    // При вставке убираем id, чтобы SQLite сгенерировал его сам
+    final data = note.toMap();
+    data.remove('id');
+    return await db.insert(
       'notes',
-      note.toMap(),
+      data,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

@@ -7,6 +7,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  dart_quill_delta: ^10.8.3
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
