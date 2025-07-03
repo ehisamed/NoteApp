@@ -17,6 +17,8 @@ class ExtraOptions extends StatefulWidget {
   final VoidCallback onAlignCenter;
   final VoidCallback onAlignRight;
 
+  final bool showExtraButton;
+
   const ExtraOptions({
     super.key,
     required this.isDark,
@@ -30,6 +32,7 @@ class ExtraOptions extends StatefulWidget {
     required this.onAlignLeft,
     required this.onAlignCenter,
     required this.onAlignRight,
+    required this.showExtraButton,
   });
 
   @override
@@ -153,15 +156,17 @@ class _ExtraOptionsState extends State<ExtraOptions> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: Icon(
-                  Icons.format_list_numbered,
-                  color: isOrderedList
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).hintColor,
+              if (!widget.showExtraButton)
+                IconButton(
+                  icon: Icon(
+                    Icons.format_list_numbered,
+                    color: isOrderedList
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).hintColor,
+                  ),
+                  onPressed: widget.onToggleNumberedList,
                 ),
-                onPressed: widget.onToggleNumberedList,
-              ),
+
               IconButton(
                 icon: Icon(
                   Icons.format_list_bulleted,
@@ -171,10 +176,13 @@ class _ExtraOptionsState extends State<ExtraOptions> {
                 ),
                 onPressed: widget.onToggleBulletedList,
               ),
-              IconButton(
-                icon: Icon(Icons.image, color: Theme.of(context).hintColor),
-                onPressed: widget.onInsertImage,
-              ),
+
+              if (!widget.showExtraButton)
+                IconButton(
+                  icon: Icon(Icons.image, color: Theme.of(context).hintColor),
+                  onPressed: widget.onInsertImage,
+                ),
+
               IconButton(
                 icon: Icon(
                   Icons.camera_alt,
@@ -182,6 +190,7 @@ class _ExtraOptionsState extends State<ExtraOptions> {
                 ),
                 onPressed: widget.onInsertCamera,
               ),
+
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -208,6 +217,7 @@ class _ExtraOptionsState extends State<ExtraOptions> {
                   ),
                 ],
               ),
+
               ToggleTextAlignment(
                 controller: widget.controller,
                 isDark: widget.isDark,
@@ -215,6 +225,7 @@ class _ExtraOptionsState extends State<ExtraOptions> {
                 onAlignCenter: widget.onAlignCenter,
                 onAlignRight: widget.onAlignRight,
               ),
+
               IconButton(
                 icon: Icon(
                   Icons.format_underline,
@@ -235,6 +246,7 @@ class _ExtraOptionsState extends State<ExtraOptions> {
                   setState(() {});
                 },
               ),
+              
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: DropdownButton<Color>(

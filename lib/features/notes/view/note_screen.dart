@@ -1,5 +1,7 @@
 // src/lib/features/notes/view/note_screen.dart
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter/services.dart';
@@ -13,6 +15,7 @@ import 'package:note_app_practice1/features/notes/utils/editor_utils.dart'
     // ignore: library_prefixes
     as editorUtils;
 import 'package:note_app_practice1/features/notes/components/dialog.dart';
+import 'package:note_app_practice1/features/notes/utils/get_formatted_date.dart';
 import 'package:note_app_practice1/l10n/app_localizations.dart';
 import 'package:note_app_practice1/features/notes/components/extra_options.dart';
 
@@ -151,43 +154,16 @@ class _NoteScreenState extends State<NoteScreen> {
   }
 
   void _toggleBulletedList() {
-    final attrs = _controller.getSelectionStyle().attributes;
-    final isBulletedList =
-        attrs.containsKey(quill.Attribute.list.key) &&
-        attrs[quill.Attribute.list.key]!.value == 'bullet';
-
-    if (isBulletedList) {
-      _controller.formatSelection(
-        quill.Attribute.clone(quill.Attribute.list, null),
-      );
-    } else {
-      _controller.formatSelection(quill.Attribute.ul);
-
-      if (isBoldSelected) {
-        _controller.formatSelection(
-          quill.Attribute.clone(quill.Attribute.bold, null),
-        );
-        setState(() => isBoldSelected = false);
-      }
-      if (isItalicSelected) {
-        _controller.formatSelection(
-          quill.Attribute.clone(quill.Attribute.italic, null),
-        );
-        setState(() => isItalicSelected = false);
-      }
-      if (isCheckboxSelected) {
-        _controller.formatSelection(
-          quill.Attribute.clone(quill.Attribute.list, null),
-        );
-        setState(() => isCheckboxSelected = false);
-      }
-    }
-
-    _editorFocusNode.requestFocus();
-
-    setState(() {
-      // обновляем буллет-состояние если хочешь добавить
-    });
+    editorUtils.toggleBulletedList(
+      controller: _controller,
+      editorFocusNode: _editorFocusNode,
+      isBoldSelected: isBoldSelected,
+      isItalicSelected: isItalicSelected,
+      isCheckboxSelected: isCheckboxSelected,
+      setBoldSelected: (val) => setState(() => isBoldSelected = val),
+      setItalicSelected: (val) => setState(() => isItalicSelected = val),
+      setCheckboxSelected: (val) => setState(() => isCheckboxSelected = val),
+    );
   }
 
   void _insertImage() async {
@@ -290,7 +266,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 ),
               );
 
-              print('Выбранное время напоминания: $reminderDateTime');
+              log('Выбранное время напоминания: $reminderDateTime');
             },
             icon: Icon(Icons.add_alarm),
             label: Text(
@@ -310,13 +286,13 @@ class _NoteScreenState extends State<NoteScreen> {
               onTap: () {
                 if (_controller.hasUndo) {
                   _controller.undo();
-                  print('Undo performed');
+                  log('Undo performed');
                 }
               },
               onHold: () {
                 if (_controller.hasUndo) {
                   _controller.undo();
-                  print('Undo hold performed');
+                  log('Undo hold performed');
                 }
               },
             ),
@@ -332,13 +308,13 @@ class _NoteScreenState extends State<NoteScreen> {
               onTap: () {
                 if (_controller.hasRedo) {
                   _controller.redo();
-                  print('Redo performed');
+                  log('Redo performed');
                 }
               },
               onHold: () {
                 if (_controller.hasRedo) {
                   _controller.redo();
-                  print('Redo hold performed');
+                  log('Redo hold performed');
                 }
               },
             ),
@@ -353,38 +329,48 @@ class _NoteScreenState extends State<NoteScreen> {
             // Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                controller: _titleController,
-                keyboardType: TextInputType.multiline,
-                minLines: 1,
-                maxLines: 5,
-                buildCounter:
-                    (
-                      _, {
-                      required int currentLength,
-                      required bool isFocused,
-                      required int? maxLength,
-                    }) => null,
-                inputFormatters: [
-                  TextInputFormatter.withFunction((oldValue, newValue) {
-                    if (newValue.text.split('\n').length > 4) return oldValue;
-                    return newValue;
-                  }),
-                ],
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: AppLocalizations.of(context)!.noteScreen_title,
-                  contentPadding: EdgeInsets.zero,
-                  hintStyle: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 24,
-                  ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 100, // фикс под 2 строки
                 ),
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Colors.black,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    controller: _titleController,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    textInputAction: TextInputAction.done, // запрет Enter
+                    buildCounter:
+                        (
+                          _, {
+                          required int currentLength,
+                          required bool isFocused,
+                          required int? maxLength,
+                        }) => null,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(
+                        RegExp(r'\n'),
+                      ), // 🚫 запрещаем Enter
+                    ],
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: AppLocalizations.of(context)!.noteScreen_title,
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 24,
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black,
+                      height: 1.25,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -395,7 +381,7 @@ class _NoteScreenState extends State<NoteScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Июнь 26",
+                    getFormattedDate(context),
                     style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
                   ),
 
@@ -530,6 +516,7 @@ class _NoteScreenState extends State<NoteScreen> {
                       onAlignLeft: _alignLeft,
                       onAlignCenter: _alignCenter,
                       onAlignRight: _alignRight,
+                      showExtraButton: showExtraButton,
                     ),
 
                   // Custom Toolbar
