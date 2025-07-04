@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:note_app_practice1/features/categories/view/categories_screen.dart';
 import 'package:note_app_practice1/features/notes/view/notes_screen.dart';
-import 'package:note_app_practice1/features/notes/view_model/notes_provider.dart';
 import 'package:note_app_practice1/features/tasks/view/tasks_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +13,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [NotesBlocProvider(child: NotesScreen()), TasksScreen()];
+  final List<Widget> _pages = [
+    NotesScreen(),
+    TasksScreen(),
+    CategoriesScreen(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -35,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           data: Theme.of(context).copyWith(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            splashFactory: NoSplash.splashFactory
+            splashFactory: NoSplash.splashFactory,
           ),
           child: BottomNavigationBar(
             currentIndex: _selectedIndex,
@@ -45,6 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.notes), label: "Notes"),
               BottomNavigationBarItem(icon: Icon(Icons.note), label: "Tasks"),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.table_rows_rounded),
+                label: "Categories",
+              ),
             ],
           ),
         ),

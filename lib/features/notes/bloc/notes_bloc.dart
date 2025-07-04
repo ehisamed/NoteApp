@@ -38,7 +38,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     log('▶ Добавление заметки: ${event.note.title}');
     try {
       await noteRepository.insertNote(event.note);
-      add(LoadNotesList()); // Обновить список
+      add(LoadNotesList());
     } catch (e) {
       emit(NotesError('Ошибка при добавлении заметки: $e'));
     }

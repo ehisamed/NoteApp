@@ -25,7 +25,6 @@ class NoteModel {
     );
   }
 
-  /// Преобразует NoteModel в Map для сохранения в базу
   Map<String, dynamic> toMap() {
     return {
       'id': id,

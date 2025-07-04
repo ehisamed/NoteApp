@@ -26,7 +26,7 @@ class ToggleTextAlignment extends StatelessWidget {
     final alignment = attrs[quill.Attribute.align.key]?.value ?? 'left';
 
     Color activeColor = Theme.of(context).colorScheme.primary;
-    Color inactiveColor = isDark ? Colors.white70 : Colors.black54;
+    Color inactiveColor = isDark ? Colors.white70 : Theme.of(context).hintColor;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

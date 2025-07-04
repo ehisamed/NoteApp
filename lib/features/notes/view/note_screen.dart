@@ -736,24 +736,21 @@ class _NoteScreenState extends State<NoteScreen> {
                                   .toJson();
                               final now = DateTime.now();
 
-                              // Проверяем: есть ли у заметки id — значит update, иначе add
                               if (widget.noteId != null) {
-                                // Обновляем существующую заметку
                                 final updatedNote = NoteModel(
-                                  id: widget.noteId, // сохраняем id для update
+                                  id: widget.noteId,
                                   title: title,
                                   content: jsonEncode(contentJson),
                                   createdAt:
                                       widget.createdAt ??
-                                      now, // сохраняем оригинальную дату создания (если есть)
-                                  updatedAt: now, // обновляем дату обновления
+                                      now, 
+                                  updatedAt: now,
                                 );
 
                                 context.read<NotesBloc>().add(
                                   UpdateNote(updatedNote),
                                 );
                               } else {
-                                // Создаём новую заметку
                                 final newNote = NoteModel(
                                   title: title,
                                   content: jsonEncode(contentJson),

@@ -21,8 +21,7 @@ ThemeData lightMode = ThemeData(
     showUnselectedLabels: true,
   ),
   hintColor: Color(0xffe5e5e5),
-  // splashColor: Colors.transparent,
-
+  cardColor: Color(0xfff5f5f5),
 );
 
 ThemeData darkMode = ThemeData(
@@ -45,9 +44,7 @@ ThemeData darkMode = ThemeData(
     unselectedItemColor: Color(0xff737373),
     showUnselectedLabels: true,
     elevation: 0.1,
-    // enableFeedback: false,
   ),
   hintColor: Color(0xff737373),
-  // splashColor: Colors.transparent,
-
+  cardColor: Color(0xff171717)
 );
